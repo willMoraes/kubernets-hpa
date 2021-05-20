@@ -1,25 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
-metadata: 
-  name: hello-go
+metadata:
+  name: go-hpa
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: hello-go
+      run: go-hpa
+  replicas: 1
   template:
     metadata:
       labels:
-        app: hello-go
+        run: go-hpa
     spec:
-      containers: 
-        - name: utilizandok8-go
-          image: willmsmoraes/utilizandok8-go:latest
-          ports: 
-            - containerPort: 80
-
-          resources:
-            requests: 
-              cpu: "100m"
-            limits: 
-              cpu: "200m"
+      containers:
+      - name: go-hpa
+        image: willmsmoraes/go-hpa
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 100m
+          requests:
+            cpu: 50m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-hpa
+  labels:
+    run: go-hpa
+spec:
+  ports:
+  - port: 80
+  selector:
+    run: go-hpa
