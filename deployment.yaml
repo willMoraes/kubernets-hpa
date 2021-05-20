@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: hello-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-go
+  template:
+    metadata:
+      labels:
+        app: hello-go
+    spec:
+      containers: 
+        - name: utilizandok8-go
+          image: willmsmoraes/utilizandok8-go:latest
+          ports: 
+            - containerPort: 80
+
+          resources:
+            requests: 
+              cpu: "100m"
+            limits: 
+              cpu: "200m"
